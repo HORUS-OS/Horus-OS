@@ -1,0 +1,33 @@
+{
+  "_zweck": "Broker-Konfiguration. Alle Werte sind Beispiele.",
+  "ollama_url": "http://localhost:11434",
+  "default_model": "qwen3:8b",
+  "budget_eur_monat": 0.0,
+  "_budget": "Monatsbudget fuer kostenpflichtige Anbieter. 0 heisst: ausschliesslich lokal.",
+  "fixkosten_eur_monat": {},
+  "_fixkosten": "Laufende Abos, die vom Budget abgehen, BEVOR ein Agent etwas ausgeben kann. Der Tagesdeckel wird daraus abgeleitet -- eine Zahl, eine Quelle.",
+  "prioritaetsklassen": {
+    "demo": 3
+  },
+  "kontingente_pro_tag": {
+    "_default": 200
+  },
+  "gpu": {
+    "manage_lmstudio": false,
+    "lms_bin": "",
+    "preflight": "",
+    "idle_release_sekunden": 600,
+    "_idle_release": "Wie lange die GPU nach dem letzten Auftrag gehalten wird. Zu kurz gewaehlt laedt das Modell staendig neu -- bei 24 GB kostet das Minuten je Anfrage."
+  },
+  "stillstand_sekunden": 600,
+  "ladefrist_sekunden": 1800,
+  "notbremse_sekunden": 14400,
+  "auftrag_frist_sekunden": 16200,
+  "_zeitgrenzen": "Reihenfolge, die stimmen MUSS: ladefrist < notbremse < auftrag_frist. Die Ladefrist gilt bis zum ERSTEN Token -- solange ein Modell laedt, gibt es kein Lebenszeichen, und ein Stillstands-Abbruch traefe den falschen Fall.",
+  "gruebel_fenster": 200,
+  "gruebel_wiederholungen": 4,
+  "gruebel_ab_zeichen": 1500,
+  "queue_takt_sekunden": 3,
+  "praesenz_frist_sekunden": 600,
+  "ledger": "~/.local/state/firma-mitarbeiter/ledger.json"
+}

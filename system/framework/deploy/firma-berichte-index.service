@@ -1,0 +1,18 @@
+[Unit]
+# Spiegelt neue Taetigkeitsberichte aus Postgres nach Qdrant, damit
+# archiv_suchen sie findet. Braucht den laufenden archiv-embed (Vektoren) und
+# den Qdrant-Tunnel.
+Description=Firma: Taetigkeitsberichte fuer die Suche indizieren
+After=archiv-embed.service horus-qdrant-tunnel.service
+Wants=archiv-embed.service
+
+[Service]
+# Neue Dateien nur fuer den Eigentuemer lesbar. Ohne das entstehen session.json
+# (mit Matrix-Zugangstoken) und das Ledger mit 0664 -- ein chmod im Nachhinein
+# haelt nicht, weil die naechste Datei wieder offen angelegt wird.
+UMask=0077
+Type=oneshot
+ExecStart=%h/Horus-OS/system/mitarbeiter/framework/venv/bin/python %h/Horus-OS/system/mitarbeiter/framework/berichte_index.py
+# Der Job ist idempotent (stabile Punkt-IDs, Markierung erst nach dem Schreiben);
+# ein Fehlschlag darf deshalb folgenlos wiederholt werden.
+Nice=10

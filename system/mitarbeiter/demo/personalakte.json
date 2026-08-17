@@ -1,0 +1,45 @@
+{
+  "_zweck": "Demo-Akte. Sie zeigt die Struktur, nicht eine echte Person. Lege je Angestelltem einen Ordner mit personalakte.json und persoenlichkeit.md an; der Dateiname des Ordners ist die agent_id.",
+  "agent_id": "demo",
+  "anzeige_name": "Demo",
+  "matrix_id": "@demo:example.org",
+  "rolle": "Beispiel-Angestellte(r) — ersetze das durch eine echte Rolle",
+  "gruppe": "beispiel",
+  "ebene": 2,
+  "reports_to": null,
+  "kann_beauftragen": [],
+  "modell": "qwen3:8b",
+  "_modell": "Welches Sprachmodell dieser Agent nutzt. Faellt weg, wenn der Knoten in hosts.json ein eigenes traegt -- das Modell gehoert zur Hardware, nicht zur Firma.",
+  "anforderungen": {
+    "braucht_gpu": true,
+    "vram_gb": 6
+  },
+  "_anforderungen": "WAS der Agent braucht, nicht WO er laeuft. Der dispatcher sucht dazu den Knoten. Ein Geraetename hier waere eine Behauptung, eine Anforderung ist pruefbar.",
+  "prioritaetsklasse": 3,
+  "startup_prioritaet": 50,
+  "werkzeuge": [
+    "termin_suchen",
+    "vorgang_anlegen",
+    "vorgang_abschliessen"
+  ],
+  "_werkzeuge": "Wofuer der Agent ZUSTAENDIG ist. Technisch darf er jedes registrierte Werkzeug -- die Rechtepruefung sitzt im Broker, nicht im Prompt.",
+  "werkzeuge_gesperrt": [],
+  "wacht": [],
+  "_wacht": "Optionale Daueraufgaben: praesenz, arbeitsvorrat, arbeitszeit.",
+  "vollmacht": {
+    "entscheidet_selbst": "Fachliches im eigenen Zustaendigkeitsbereich.",
+    "immer_zu_chef": [
+      "Geld und Ausgaben",
+      "Loeschungen",
+      "alles nach aussen Wirkende"
+    ],
+    "_immer_zu_chef": "Vorbehalte des Inhabers. Sie werden serverseitig geprueft, nicht im Prompt erbeten.",
+    "notfall_darf_springen": false
+  },
+  "sicherheit": {
+    "whitelist_befehle": [],
+    "bestaetigung_pflicht": []
+  },
+  "beschreibung": "Diese Akte ist ein Muster. Kopiere sie, gib dem Ordner einen Namen und schreibe eine persoenlichkeit.md dazu.",
+  "erstellt": "2026-01-01"
+}

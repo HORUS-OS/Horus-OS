@@ -1,0 +1,19 @@
+{
+  "_zweck": "Zeitplan der Daueraufgaben. Alle Werte sind Beispiele. Der Scheduler laeuft dort, wo er NICHT rechnet -- er reiht ein, gearbeitet wird auf den Rechenknoten.",
+  "aufgaben": [
+    {
+      "name": "briefing",
+      "agent": "assistenz",
+      "uhrzeit": "07:30",
+      "wochentags": true,
+      "_hinweis": "Nur an Werktagen -- am Wochenende weckt niemand gern."
+    },
+    {
+      "name": "palette",
+      "agent": "technik",
+      "uhrzeit": "03:00",
+      "wochentags": false,
+      "_hinweis": "Nachts, weil die teuren Kategorien die GPU lange belegen."
+    }
+  ]
+}

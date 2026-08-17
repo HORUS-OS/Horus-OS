@@ -1,0 +1,33 @@
+# Horus-OS — Python-Abhaengigkeiten
+#
+# Geprueft am 2026-08-17 durch eine SIMULIERTE Installation: frisches venv,
+# `pip install -r`, dann jedes Modul importieren. Dabei kam heraus, dass hier
+# zwei Pakete fehlten, die der Code benutzt (caldav, icalendar) -- ein Fehler,
+# den kein Nachdenken gefunden haette, weil die eigene Umgebung sie laengst
+# installiert hatte.
+#
+# Pruefen laesst sich das jederzeit selbst:
+#     python3 voraussetzungen.py
+
+# --- Pflicht ---------------------------------------------------------------
+# Ohne diese drei laeuft kein Agent.
+matrix-nio
+requests
+# Seit Schritt 3 (Zustand in Postgres) auf JEDEM Knoten noetig -- speicher.py,
+# auftragsqueue.py und standverteiler.py bauen darauf auf.
+psycopg[binary]
+
+# --- Kalender --------------------------------------------------------------
+# Fuer die Termin-Werkzeuge (termin_anlegen, termin_suchen) und den
+# Kalender-Teil des Morgen-Briefings. Ohne sie starten die Agenten, aber
+# jeder Kalenderzugriff scheitert.
+caldav
+icalendar
+
+# --- Optional --------------------------------------------------------------
+# E2E-Verschluesselung (encryption: true in firma.config.json).
+# Braucht zusaetzlich das System-Paket libolm-dev:
+#   matrix-nio[e2e]
+#
+# Sprache (stimme.py, STT/TTS) laeuft ueber externe Dienste bzw. lokale
+# Binaries, nicht ueber Python-Pakete -- siehe die Kommentare dort.

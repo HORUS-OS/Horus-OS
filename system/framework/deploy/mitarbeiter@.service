@@ -1,0 +1,22 @@
+[Unit]
+# systemd --user Template — ein Dienst pro Angestelltem, auf jedem Gerät gleich.
+# Aktivieren:  systemctl --user enable --now mitarbeiter@assistenz
+# %i = agent_id (assistenz | projektleitung | archivar | buchhalter)
+Description=KI-Firma Mitarbeiter-Agent (%i)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+# Neue Dateien nur fuer den Eigentuemer lesbar. Ohne das entstehen session.json
+# (mit Matrix-Zugangstoken) und das Ledger mit 0664 -- ein chmod im Nachhinein
+# haelt nicht, weil die naechste Datei wieder offen angelegt wird.
+UMask=0077
+Type=simple
+ExecStart=%h/Horus-OS/system/mitarbeiter/framework/venv/bin/python %h/Horus-OS/system/mitarbeiter/framework/mitarbeiter_agent.py %i
+Restart=on-failure
+RestartSec=10
+# Keyring-Zugriff (firma-keyring.py) braucht die User-Session/DBus:
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=default.target

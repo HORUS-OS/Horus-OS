@@ -1,0 +1,85 @@
+{
+  "_zweck": "Die Testpalette — Stufe VOR der Sandbox-Beta. Je Kategorie steht hier, WANN sie laeuft, WIE HART ein Fehlschlag wiegt und WAS der Knoten koennen muss. Ein Knotenname steht bewusst nirgends (F22 = B): Die Palette bindet sich nicht an einen Rechner, jeder Test laeuft dort, wo er etwas beweisen kann. Den Knoten sucht der dispatcher.",
+  "_reihenfolge": "Aufsteigend nach `reihenfolge`, billig und sperrend zuerst (F24 = A). Der Grund ist die Rechnung: Faellt Security in Minute zwei, ist eine Stunde Dauerlast gespart. Umgekehrt waere sie verbrannt. Der Lauf endet aber erst, wenn alles durch ist (F24.A.4 = b) — abgebrochen wird ZWISCHEN Kategorien, nie mitten in einer (F23 = B).",
+  "_haerte": "Nur `security` sperrt (F1.B.3 = b). Alles andere warnt: Ein bereits einmal gemachter Fehler haelt den Rollout also NICHT auf. Das ist bewusst so entschieden und keine Nachlaessigkeit — nachzulesen als W4 in Ergebnis_Runde_02.md.",
+  "_fehlende_module": "Eine Kategorie ohne Modul k_<name>.py gilt als `geplant` und wird uebersprungen, nicht als Fehler gewertet. So kann P6 die Kategorien einzeln nachreichen, ohne dass der Rahmen so lange als kaputt gilt.",
+  "_anforderung": "Wird gegen hosts.json gematcht (braucht_gpu, vram_gb, arch, braucht_aussensicht). Ein einzelner Test darf sie ueberschreiben — der Portscan braucht Aussensicht, die Dateirechte-Pruefung muss lokal laufen. Beides steckt in derselben Kategorie.",
+  "vorgaenge_fuer": "technik",
+  "kategorien": {
+    "selbsttest": {
+      "reihenfolge": 5,
+      "haerte": "warnt",
+      "aktiv": true,
+      "anforderung": {},
+      "_warum": "Prueft den Rahmen selbst, nicht den Code. Laeuft zuerst, weil ein kaputter Laeufer sonst als bestandener Lauf durchginge — ein gruener Balken, hinter dem nichts gemessen wurde, ist schlimmer als ein roter."
+    },
+    "security": {
+      "reihenfolge": 10,
+      "haerte": "sperrt",
+      "aktiv": true,
+      "anforderung": {},
+      "_warum": "Die einzige sperrende Kategorie. Billig und frueh: Secrets, Dateirechte, offene Ports. Der Portscan ueberschreibt die Anforderung auf braucht_aussensicht — lokal gemessen war der Port `dicht`, waehrend Docker-DNAT ihn am ufw vorbei ins Internet stellte."
+    },
+    "bekannte_fehler": {
+      "reihenfolge": 20,
+      "haerte": "warnt",
+      "aktiv": true,
+      "anforderung": {},
+      "_warum": "Echte Regressionstests aus den zehn dokumentierten Faellen (F6 = A), ohne die reinen Umgebungsfehler (F6.A.3 = a). Billig, weil kein Modell dabei ist."
+    },
+    "injection": {
+      "reihenfolge": 30,
+      "haerte": "warnt",
+      "aktiv": true,
+      "anforderung": {},
+      "_warum": "Zuerst die Werkzeugebene (F4.C.3 = a): Kann eingeschleuster Text einen system_*-Aufruf ausloesen? Dazu der CSV-Eingang des Kontoauszugs."
+    },
+    "kompatibilitaet": {
+      "reihenfolge": 40,
+      "haerte": "warnt",
+      "aktiv": true,
+      "anforderung": {},
+      "_warum": "venv-Aufbau je Architektur (F17 = B). Erst mit einem zweiten Befehlssatz findet diese Kategorie ueberhaupt etwas — auf x86-64 allein ist sie eine Formalie."
+    },
+    "kauffaehigkeit": {
+      "reihenfolge": 50,
+      "haerte": "warnt",
+      "aktiv": true,
+      "anforderung": {
+        "braucht_gpu": true,
+        "vram_gb": 4
+      },
+      "_warum": "Ab hier kostet jede Kategorie Modellzeit. Faelle mit bekannt richtiger Antwort (F20 = B), geprueft wird das Vorkommen der entscheidenden Zahl — kein LLM-Judge. VRAM-Anforderung auf 4 GB gesenkt: Die Faelle pruefen eine Rechnung, kein Weltwissen — dafuer genuegt ein kleines Modell, und der Knoten wird beim Messwert mitgespeichert."
+    },
+    "clean_code": {
+      "reihenfolge": 60,
+      "haerte": "warnt",
+      "aktiv": true,
+      "anforderung": {
+        "braucht_gpu": true,
+        "vram_gb": 10
+      },
+      "_warum": "Kein Linter (F5 = A), sondern Techniks Urteil gegen eine geschriebene Hausordnung (F14 = B). Teuer und schwankend — deshalb spaet und nur warnend."
+    },
+    "benchmark": {
+      "reihenfolge": 70,
+      "haerte": "warnt",
+      "aktiv": true,
+      "anforderung": {
+        "braucht_gpu": true,
+        "vram_gb": 10
+      },
+      "_warum": "~/ki-benchmark anbinden, ergaenzt um firmeneigene Aufgaben aus Historie und Werkzeugwahl (F3 = C, F3.C.3 = c). Die teuerste Kategorie mit Messwerten."
+    },
+    "stabilitaet": {
+      "reihenfolge": 80,
+      "haerte": "warnt",
+      "aktiv": true,
+      "anforderung": {
+        "braucht_gpu": true,
+        "vram_gb": 10
+      },
+      "_warum": "Eine Stunde Grundlast (F8.C.3 = b). Steht ganz am Ende, weil ein Abbruch danach nichts mehr kostet — davor haette er eine Stunde vernichtet."
+    }
+  }
+}

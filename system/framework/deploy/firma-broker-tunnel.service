@@ -1,0 +1,44 @@
+[Unit]
+# ============================================================================
+# ABGELOEST seit 2026-08-14 — nicht mehr fuer neue Geraete verwenden.
+#
+# Diesen Tunnel ersetzt das WireGuard-Firma-Mesh (VPS = 10.0.0.1 als Server).
+# Der Broker hoert seither zusaetzlich auf der Mesh-IP; die Zugangskontrolle
+# ist die Mesh-Mitgliedschaft plus eine ufw-Regel, die Port 8900 ausschliesslich
+# ueber wg0 durchlaesst. Einrichtung eines Geraets: deploy/mesh-install.sh
+#
+# Die Datei bleibt als Rueckfallebene liegen, falls ein Geraet (noch) nicht ins
+# Mesh kann. Auf dem Haupt-PC war sie nie aktiv.
+# ============================================================================
+Description=Firma: SSH-Tunnel zum Buchhalter-Broker (Pi -> Haupt-PC, kein offener Port) [ABGELOEST]
+# Auf JEDEM entfernten Gerät (Pi 4, Pi 3, Alt-PC) zu installieren, NICHT auf dem
+# Haupt-PC selbst. Muster identisch zu firma-radicale-tunnel.service.
+#
+# Warum Tunnel statt LAN-Bind: Der Broker hört auf 127.0.0.1:8900 und hat KEINE
+# Authentifizierung — wer den Port erreicht, kann GPU und Budget der Firma nutzen.
+# Der Tunnel hält ihn auf localhost und nutzt SSH-Schlüssel als Zugangskontrolle.
+#
+# Einrichtung auf dem Pi:
+#   ssh-keygen -t ed25519 -f ~/.ssh/firma_broker -N ""
+#   ssh-copy-id -i ~/.ssh/firma_broker.pub chef@<haupt-pc>
+#   systemctl --user enable --now firma-broker-tunnel
+# Danach zeigt firma.config.json auf dem Pi weiterhin auf http://127.0.0.1:8900.
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+# Neue Dateien nur fuer den Eigentuemer lesbar. Ohne das entstehen session.json
+# (mit Matrix-Zugangstoken) und das Ledger mit 0664 -- ein chmod im Nachhinein
+# haelt nicht, weil die naechste Datei wieder offen angelegt wird.
+UMask=0077
+Environment=HAUPT_PC=chef@haupt-pc
+ExecStart=/usr/bin/ssh -NT \
+  -o ExitOnForwardFailure=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=3 \
+  -o StrictHostKeyChecking=accept-new -i %h/.ssh/firma_broker \
+  -L 8900:127.0.0.1:8900 ${HAUPT_PC}
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=default.target

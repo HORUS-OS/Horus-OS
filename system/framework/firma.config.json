@@ -1,0 +1,27 @@
+{
+  "_zweck": "Zentrale Konfiguration. Alle Werte hier sind Beispiele.",
+  "homeserver": "https://matrix.example.org",
+  "ollama_url": "http://localhost:11434",
+  "buchhalter_url": "http://127.0.0.1:8900",
+  "default_model": "qwen3:8b",
+  "allowed_users": [
+    "@du:example.org"
+  ],
+  "agent_users": {
+    "demo": "@demo:example.org"
+  },
+  "forum_room": "#firma:example.org",
+  "state_dir": "~/.local/state/firma-mitarbeiter",
+  "encryption": false,
+  "heartbeat_sekunden": 120,
+  "chef": "@du:example.org",
+  "vorgaenge_speicher": "postgres",
+  "postgres": {
+    "host": "10.0.0.1",
+    "port": 5432,
+    "dbname": "firma",
+    "user": "firma",
+    "timeout": 8
+  },
+  "_postgres": "Das Passwort kommt aus dem Keyring, nie aus dieser Datei. Siehe speicher.py."
+}

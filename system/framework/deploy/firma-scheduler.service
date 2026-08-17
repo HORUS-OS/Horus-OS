@@ -1,0 +1,28 @@
+[Unit]
+# Scheduler der Firma: nimmt Denkauftraege an und stellt sie in die
+# Postgres-Queue. Gerechnet wird auf dem Worker (Haupt-PC) — dieser Dienst
+# ueberlebt dessen Neustart und puffert so lange in der Datenbank.
+Description=Firma: Auftrags-Scheduler (VPS)
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+# Neue Dateien nur fuer den Eigentuemer lesbar. Ohne das entstehen session.json
+# (mit Matrix-Zugangstoken) und das Ledger mit 0664 -- ein chmod im Nachhinein
+# haelt nicht, weil die naechste Datei wieder offen angelegt wird.
+UMask=0077
+Type=simple
+WorkingDirectory=/opt/firma-scheduler
+# Das Postgres-Passwort steht in einer Datei mit Rechten 600, nie im Repo
+# und nie in der Kommandozeile.
+EnvironmentFile=/etc/firma-scheduler.env
+ExecStart=/opt/firma-scheduler/venv/bin/python /opt/firma-scheduler/scheduler.py
+Restart=on-failure
+RestartSec=10
+Environment=PYTHONUNBUFFERED=1
+# Der Dienst rechnet nichts und braucht keine Rechte ausserhalb seines Ordners.
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

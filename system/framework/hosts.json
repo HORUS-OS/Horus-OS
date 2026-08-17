@@ -1,0 +1,39 @@
+{
+  "_zweck": "Host-Inventar. Der dispatcher matcht das Feld `anforderungen` einer Personalakte (braucht_gpu, vram_gb, arch, braucht_aussensicht) gegen diese Faehigkeiten und entscheidet daraus, WO ein Agent laeuft. Alle Werte hier sind erfunden.",
+  "_gemessen": "Trage nur ein, was du GEMESSEN hast. Bei einem Pi Zero war die Annahme 'traegt einen Agenten' falsch -- widerlegt erst durch den Versuch.",
+  "hosts": {
+    "rechner-eins": {
+      "mesh_ip": "10.0.0.2",
+      "lan_ip": "192.168.0.2",
+      "hostname": "beispiel-pc",
+      "rolle": "rechenknoten",
+      "kerne": 12,
+      "ram_mb": 32000,
+      "gpu": true,
+      "gpu_name": "Beispiel-GPU",
+      "vram_gb": 16,
+      "arch": "x86_64",
+      "num_ctx": 32768,
+      "num_gpu": 24,
+      "_num_ctx": "Diese beiden gehoeren zum KNOTEN, nicht zur Firma: Werte fuer 16 GB VRAM sprengen einen 4-GB-Knoten, und Ollama antwortet dann mit einem nackten 500er.",
+      "ollama_url": "http://localhost:11434",
+      "pruef_port": 8900,
+      "_pruef_port": "Ein Port, den der Host WIRKLICH anbietet. Pauschal SSH:22 zu pruefen erklaerte einen SSH-CLIENT fuer tot.",
+      "agenten_tauglich": true
+    },
+    "kleiner-knoten": {
+      "mesh_ip": "10.0.0.3",
+      "rolle": "pruefknoten arm32",
+      "arch": "armv6l",
+      "bits": 32,
+      "kerne": 1,
+      "ram_mb": 474,
+      "gpu": false,
+      "vram_gb": 0,
+      "pruef_port": 22,
+      "agenten_tauglich": false,
+      "pruefknoten": true,
+      "_hinweis": "'Braucht keine GPU' heisst nicht 'laeuft ueberall'. Dieser Knoten traegt keinen vollstaendigen Agenten, belegt aber eine Architektur fuer die Kompatibilitaetspruefung."
+    }
+  }
+}

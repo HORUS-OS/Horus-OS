@@ -1,0 +1,14 @@
+[Unit]
+Description=Kennzahlen der Mitarbeiter auffrischen
+Documentation=file:///home/nutzer/Horus-OS/system/mitarbeiter/framework/bewertung.py
+
+[Service]
+# Neue Dateien nur fuer den Eigentuemer lesbar. Ohne das entstehen session.json
+# (mit Matrix-Zugangstoken) und das Ledger mit 0664 -- ein chmod im Nachhinein
+# haelt nicht, weil die naechste Datei wieder offen angelegt wird.
+UMask=0077
+Type=oneshot
+# /usr/bin/python3 bewusst: das Modul liest nur Dateien und den Broker, braucht
+# keine venv-Pakete -- und der System-Interpreter ist im Dienstkontext der
+# verlaesslichere (siehe hermes-keyring-launch.sh).
+ExecStart=/usr/bin/python3 %h/Horus-OS/system/mitarbeiter/framework/bewertung.py

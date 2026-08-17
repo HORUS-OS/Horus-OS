@@ -1,0 +1,20 @@
+[Unit]
+Description=Firma SearXNG SSH-Tunnel (PC -> VPS localhost:8080, kein offener Port)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+# Neue Dateien nur fuer den Eigentuemer lesbar. Ohne das entstehen session.json
+# (mit Matrix-Zugangstoken) und das Ledger mit 0664 -- ein chmod im Nachhinein
+# haelt nicht, weil die naechste Datei wieder offen angelegt wird.
+UMask=0077
+# Muster wie firma-radicale-tunnel und horus-qdrant-tunnel: Der Dienst bleibt auf
+# dem VPS an 127.0.0.1 gebunden, der Zugang laeuft ausschliesslich durch SSH.
+# Lokal 8888, weil 8080 auf diesem PC schon belegt sein kann.
+ExecStart=/usr/bin/ssh -N -o ServerAliveInterval=30 -o ServerAliveCountMax=3 \
+  -o ExitOnForwardFailure=yes -L 8888:127.0.0.1:8080 mein-server
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=default.target

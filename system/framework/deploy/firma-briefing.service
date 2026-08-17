@@ -1,0 +1,12 @@
+[Unit]
+Description=Firma: Morgen-Briefing von Assistenz an Chef
+After=buchhalter-broker.service firma-radicale-tunnel.service network-online.target
+Wants=buchhalter-broker.service firma-radicale-tunnel.service
+
+[Service]
+# Neue Dateien nur fuer den Eigentuemer lesbar. Ohne das entstehen session.json
+# (mit Matrix-Zugangstoken) und das Ledger mit 0664 -- ein chmod im Nachhinein
+# haelt nicht, weil die naechste Datei wieder offen angelegt wird.
+UMask=0077
+Type=oneshot
+ExecStart=%h/Horus-OS/system/mitarbeiter/framework/venv/bin/python %h/Horus-OS/system/mitarbeiter/framework/tagesplan.py
