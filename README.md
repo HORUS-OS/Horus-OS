@@ -291,6 +291,11 @@ Repo-Namen und beim Netz — überall außer an der richtigen Stelle.
 
 Nötige Rechte (fine-grained): **Issues: Read** und **Pull requests: Read**.
 
+## KI-Erstellt
+
+Das Projekt wurde nach meinen Vorgaben und Moderation duch KI erstellt. Die Issues werden von einer KI bearbeitet.
+Die Inspirieren kommt von der Firma Everlast AI.
+
 ## Mitmachen
 
 Fehlerberichte und Vorschläge sind willkommen — als **Issue**. Sie werden nach
