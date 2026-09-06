@@ -139,7 +139,18 @@ def knoten_fuer(anf: dict, *, agent: bool = True,
         if pruefe_erreichbarkeit and not erreichbar(host):
             continue
         treffer.append((name, host, grund))
+    # Reihenfolge der geeigneten Knoten: erst die Rolle, dann die GEMESSENE
+    # `einstufung` (Benchmark-Score, hoeher = schneller), erst danach die groben
+    # Ersatzmasse VRAM und Kerne. Ein Knoten OHNE einstufung zaehlt als 0 und
+    # landet damit hinter jedem gemessenen Knoten gleicher Rolle -- Absicht:
+    # passend() hat die harte Eignung (GPU, VRAM, arch) bereits geprueft, unter
+    # den Geeigneten schlaegt Gemessenes das Geschaetzte ("gemessen, nicht
+    # geglaubt"). Wirkt ein starker, aber noch nicht gebenchmarkter Knoten
+    # dadurch zu niedrig, ist die Antwort ihn zu messen (einstufung.py), nicht
+    # die Schaetzung wieder vorzuziehen. Fehlt ueberall eine einstufung, bleibt
+    # es exakt bei der bisherigen VRAM/Kerne-Reihung.
     treffer.sort(key=lambda t: (ROLLEN_RANG.get(t[1].get("rolle", ""), 9),
+                                -float(t[1].get("einstufung") or 0),
                                 -float(t[1].get("vram_gb") or 0),
                                 -int(t[1].get("kerne") or 0)))
     return [(n, g) for n, _h, g in treffer]
@@ -161,7 +172,9 @@ def _bericht() -> None:
     for name, h in inv.items():
         zustand = "erreichbar" if erreichbar(h) else "NICHT erreichbar"
         gpu = f"GPU {h.get('vram_gb')} GB" if h.get("gpu") else "keine GPU"
-        print(f"  {name:10} {h.get('mesh_ip'):10} {gpu:14} {h.get('kerne')} Kerne  {zustand}")
+        note = h.get("einstufung")
+        stufe = f"Einstufung {note}" if note else "nicht eingestuft"
+        print(f"  {name:10} {h.get('mesh_ip'):10} {gpu:14} {h.get('kerne')} Kerne  {stufe:18} {zustand}")
     print()
     for p in sorted(MITARBEITER.glob("*/personalakte.json")):
         aid = p.parent.name

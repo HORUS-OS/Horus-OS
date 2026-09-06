@@ -248,7 +248,8 @@ findet dort die Regeln — jede mit dem Fehler, aus dem sie entstand.
 | Ort | Was |
 |---|---|
 | `system/framework/mitarbeiter_agent.py` | Die Laufzeit: ein Prozess = ein Angestellter |
-| `system/framework/dispatcher.py` | Anforderung → passender Rechner |
+| `system/framework/dispatcher.py` | Anforderung → passender Rechner (wählt bei Eignung den mit der höchsten `einstufung`) |
+| `system/framework/einstufung.py` | Gemessenen Leistungswert (Benchmark) je Knoten in `hosts.json` hinterlegen |
 | `system/framework/werkzeuge.py` | Werkzeug-Registry samt Rechteprüfung |
 | `system/framework/denkzeit.py` | Abbruch bei Stillstand, Grübeln, Notbremse |
 | `system/framework/vorgaenge.py` | Gedächtnis für angefangene Arbeit |
@@ -261,7 +262,8 @@ findet dort die Regeln — jede mit dem Fehler, aus dem sie entstand.
 system/
 ├── framework/              die Laufzeit
 │   ├── mitarbeiter_agent.py    ein Prozess = ein Angestellter
-│   ├── dispatcher.py           Anforderung -> passender Rechner
+│   ├── dispatcher.py           Anforderung -> passender Rechner (Einstufung entscheidet)
+│   ├── einstufung.py           gemessenen Benchmark-Wert je Knoten hinterlegen
 │   ├── werkzeuge.py            Registry samt Rechtepruefung
 │   ├── denkzeit.py             Stillstand, Gruebeln, Notbremse
 │   ├── palette/                Testpalette, neun Kategorien

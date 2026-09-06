@@ -12,6 +12,8 @@
       "gpu": true,
       "gpu_name": "Beispiel-GPU",
       "vram_gb": 16,
+      "einstufung": 9800,
+      "_einstufung": "GEMESSENER Leistungswert dieses Knotens, hoeher = schneller (z.B. 3DMark-GPU-Score oder LLM-Durchsatz in tokens/s -- ueber alle Knoten aber DIESELBE Messgroesse, sonst vergleicht die Sortierung Aepfel mit Birnen). Der dispatcher waehlt unter geeigneten Knoten den mit der hoechsten Einstufung; fehlt der Wert, faellt er auf die groben Masse VRAM/Kerne zurueck. Nur eintragen, was gemessen wurde -- setzen via einstufung.py, nicht raten.",
       "arch": "x86_64",
       "num_ctx": 32768,
       "num_gpu": 24,
