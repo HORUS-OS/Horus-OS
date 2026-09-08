@@ -48,6 +48,11 @@ def setzen(knoten: str, wert: float) -> None:
         # nennen.
         bekannt = ", ".join(hosts) or "(keine)"
         raise SystemExit(f"Kein Knoten '{knoten}' im Inventar. Bekannt: {bekannt}")
+    # Ganze Zahlen ganz lassen (9800 statt 9800.0) -- haelt hosts.json und den
+    # Diff sauber. Hier zentral, damit JEDER Schreiber (3DMark von Hand,
+    # durchsatz.py automatisch) dieselbe saubere Zahl hinterlegt.
+    if isinstance(wert, float) and wert.is_integer():
+        wert = int(wert)
     hosts[knoten]["einstufung"] = wert
     _speichern(daten)
     print(f"  {knoten}: einstufung = {wert:g}")
@@ -70,8 +75,6 @@ if __name__ == "__main__":
             raise SystemExit(f"'{sys.argv[2]}' ist keine Zahl.")
         if wert < 0:
             raise SystemExit("Eine Einstufung ist nie negativ.")
-        # Ganze Zahlen ganz lassen (9800 statt 9800.0) -- haelt hosts.json und
-        # den Diff sauber.
-        setzen(sys.argv[1], int(wert) if wert.is_integer() else wert)
+        setzen(sys.argv[1], wert)
     else:
         raise SystemExit(__doc__)
